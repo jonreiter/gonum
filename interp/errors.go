@@ -9,7 +9,7 @@ type Error string
 
 func (err Error) Error() string { return string(err) }
 
-var (
+const (
 	// ErrNotSorted indicates unsorted slices were passes where sorted slices were expected
 	ErrNotSorted = Error("interp: entries not sorted")
 	// ErrLengthMismatch indicates slices of different lengths were passes where the same length was expected
