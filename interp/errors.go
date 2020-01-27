@@ -5,15 +5,15 @@ import (
 )
 
 // Error represents interp handling errors.
-type Error struct{ string }
+type Error string
 
-func (err Error) Error() string { return err.string }
+func (err Error) Error() string { return string(err) }
 
 var (
 	// ErrNotSorted indicates unsorted slices were passes where sorted slices were expected
-	ErrNotSorted = Error{"interp: entries not sorted"}
+	ErrNotSorted = Error("interp: entries not sorted")
 	// ErrLengthMismatch indicates slices of different lengths were passes where the same length was expected
-	ErrLengthMismatch = Error{"interp: slice length mismatch"}
+	ErrLengthMismatch = Error("interp: slice length mismatch")
 )
 
 func panicIfNotSorted(x []float64) {

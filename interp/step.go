@@ -40,7 +40,7 @@ func (l *Step) Value(x float64) float64 {
 }
 
 // Values interpolates a sorted slice of values
-func (l *Step) Values(xs, dst []float64) []float64 {
+func (l *Step) Values(dst, xs []float64) []float64 {
 	if dst == nil {
 		dst = make([]float64, len(xs))
 	}

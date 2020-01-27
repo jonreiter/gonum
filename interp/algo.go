@@ -7,7 +7,7 @@ type Algo interface {
 
 	// Values interpolates a whole slice of values.  It will panic if
 	// the slice is not sorted in ascending order.
-	Values(xs, dst []float64) []float64
+	Values(dst, xs []float64) []float64
 
 	// Fit refits the underlying interpolation
 	// Needed if you change the underlying data

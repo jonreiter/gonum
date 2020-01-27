@@ -107,7 +107,7 @@ func (s *CubicSpline) Value(x float64) float64 {
 }
 
 // Values interpolates a sorted slice of values
-func (s *CubicSpline) Values(xs, dst []float64) []float64 {
+func (s *CubicSpline) Values(dst, xs []float64) []float64 {
 	if dst == nil {
 		dst = make([]float64, len(xs))
 	}

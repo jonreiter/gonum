@@ -37,7 +37,7 @@ func TestCubicSpline(t *testing.T) {
 			t.Error("linear interp mismatch")
 		}
 	}
-	results := l.Values(ltc.testX, nil)
+	results := l.Values(nil, ltc.testX)
 	for i, v := range ltc.expectedY {
 		if !floats.EqualWithinAbs(v, results[i], cubicsplinetol) {
 			fmt.Println(i, " : ", v, " vs ", results[i])
@@ -45,7 +45,7 @@ func TestCubicSpline(t *testing.T) {
 		}
 	}
 	dst := make([]float64, len(ltc.expectedY))
-	results2 := l.Values(ltc.testX, dst)
+	results2 := l.Values(dst, ltc.testX)
 	for i, v := range ltc.expectedY {
 		if !floats.EqualWithinAbs(v, results2[i], cubicsplinetol) {
 			t.Error("values mismatch")
