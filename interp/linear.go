@@ -28,11 +28,6 @@ func (l *Linear) Fit() error {
 	return nil
 }
 
-// NumInputs returns the number of input points
-func (l *Linear) NumInputs() int {
-	return len(l.x)
-}
-
 // Value returns the linearly interpolated value
 func (l *Linear) Value(x float64) float64 {
 	val, _ := l.linearPiecewiseWithIndex(x, 0)
@@ -63,8 +58,8 @@ func (l *Linear) linearPiecewiseWithIndex(x float64, startIdx int) (value float6
 	if idx == 0 {
 		return ys[0], idx + startIdx
 	}
-	if idx == l.NumInputs()-startIdx {
-		return ys[l.NumInputs()-startIdx-1], idx + startIdx
+	if idx == NumInputs(l)-startIdx {
+		return ys[NumInputs(l)-startIdx-1], idx + startIdx
 	}
 	//	fmt.Println("got idx: ", idx)
 	return linearPiecewise(x, xs[idx-1], xs[idx], ys[idx-1], ys[idx]), idx + startIdx
@@ -75,4 +70,16 @@ func linearPiecewise(x, x0, x1, y0, y1 float64) float64 {
 	dy := y1 - y0
 	dRatio := dy / dx
 	return y0 + (x-x0)*dRatio
+}
+
+// RawData returns the raw underling points.
+func (l *Linear) RawData() ([]float64, []float64) {
+	return l.x, l.y
+}
+
+// SetRawData updates the raw underling points.
+func (l *Linear) SetRawData(xs, ys []float64) error {
+	l.x = xs
+	l.y = ys
+	return l.Fit()
 }

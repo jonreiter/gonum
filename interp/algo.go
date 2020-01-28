@@ -13,6 +13,16 @@ type Algo interface {
 	// Needed if you change the underlying data
 	Fit() error
 
-	// NumInputs returns the number of input points
-	NumPoints() int
+	// SetRawData updates the underlying raw data and does
+	// a refit
+	SetRawData(xs, ys []float64) error
+
+	// RawData returns the underlying raw data
+	RawData() ([]float64, []float64)
+}
+
+// NumInputs returns the number of underlying points in an Algo
+func NumInputs(a Algo) int {
+	x, _ := a.RawData()
+	return len(x)
 }

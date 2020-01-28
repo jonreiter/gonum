@@ -1,6 +1,7 @@
 package interp_test
 
 import (
+	"math"
 	"testing"
 
 	"gonum.org/v1/gonum/floats"
@@ -35,14 +36,14 @@ func TestLinear(t *testing.T) {
 			t.Error("linear interp mismatch")
 		}
 	}
-	results := l.Values(ltc.testX, nil)
+	results := l.Values(nil, ltc.testX)
 	for i, v := range ltc.expectedY {
 		if !floats.EqualWithinAbs(v, results[i], lineartol) {
 			t.Error("values mismatch")
 		}
 	}
 	dst := make([]float64, len(ltc.expectedY))
-	results2 := l.Values(ltc.testX, dst)
+	results2 := l.Values(dst, ltc.testX)
 	for i, v := range ltc.expectedY {
 		if !floats.EqualWithinAbs(v, results2[i], lineartol) {
 			t.Error("values mismatch")
@@ -50,5 +51,25 @@ func TestLinear(t *testing.T) {
 		if !floats.EqualWithinAbs(v, dst[i], lineartol) {
 			t.Error("values mismatch")
 		}
+	}
+}
+
+func TestLinearResample(t *testing.T) {
+	var ltc LinearTestCase
+	ltc.xs = []float64{0, 2.5, 5, 7.5, 10}
+	ltc.ys = []float64{0, math.NaN(), 5, 7.5, 10}
+
+	l, err := interp.NewLinear(ltc.xs, ltc.ys)
+	if err != nil {
+		t.Error("got back error building new linear")
+	}
+
+	err = interp.Resample(l, math.IsNaN)
+	if err != nil {
+		t.Error("got back error doing resampling")
+	}
+	_, rawY := l.RawData()
+	if floats.HasNaN(rawY) {
+		t.Error("found a Nan when should not have")
 	}
 }

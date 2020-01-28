@@ -39,7 +39,7 @@ func NewCubicSpline(x, y []float64) (*CubicSpline, error) {
 // Fit refits the undelying slices.
 func (s *CubicSpline) Fit() error {
 	panicIfDifferentLengths(s.x, s.y)
-	n := s.NumInputs() - 1
+	n := NumInputs(s) - 1
 
 	a := make([]float64, n+1)
 	for i, v := range s.y {
@@ -95,11 +95,6 @@ func (s *CubicSpline) Fit() error {
 	return nil
 }
 
-// NumInputs returns the number of input points
-func (s *CubicSpline) NumInputs() int {
-	return len(s.x)
-}
-
 // Value returns the linearly interpolated value
 func (s *CubicSpline) Value(x float64) float64 {
 	val, _ := s.stepWithIndex(x, 0)
@@ -129,8 +124,20 @@ func (s *CubicSpline) stepWithIndex(x float64, startIdx int) (value float64, ind
 	if idx == 0 {
 		return s.splines[0].value(x), idx
 	}
-	if idx > s.NumInputs()-2 {
-		return s.splines[s.NumInputs()-2].value(x), idx
+	if idx > NumInputs(s)-2 {
+		return s.splines[NumInputs(s)-2].value(x), idx
 	}
 	return s.splines[idx-1].value(x), idx
+}
+
+// RawData returns the raw underlying points
+func (s *CubicSpline) RawData() ([]float64, []float64) {
+	return s.x, s.y
+}
+
+// SetRawData sets the raw underlying points
+func (s *CubicSpline) SetRawData(x, y []float64) error {
+	s.x = x
+	s.y = y
+	return s.Fit()
 }

@@ -35,14 +35,14 @@ func TestStep(t *testing.T) {
 			t.Error("step interp mismatch")
 		}
 	}
-	results := l.Values(ltc.testX, nil)
+	results := l.Values(nil, ltc.testX)
 	for i, v := range ltc.expectedY {
 		if !floats.EqualWithinAbs(v, results[i], steptol) {
 			t.Error("values mismatch")
 		}
 	}
 	dst := make([]float64, len(ltc.expectedY))
-	results2 := l.Values(ltc.testX, dst)
+	results2 := l.Values(dst, ltc.testX)
 	for i, v := range ltc.expectedY {
 		if !floats.EqualWithinAbs(v, results2[i], steptol) {
 			t.Error("values mismatch")

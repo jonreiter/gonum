@@ -28,11 +28,6 @@ func (l *Step) Fit() error {
 	return nil
 }
 
-// NumInputs returns the number of input points
-func (l *Step) NumInputs() int {
-	return len(l.x)
-}
-
 // Value returns the linearly interpolated value
 func (l *Step) Value(x float64) float64 {
 	val, _ := l.stepWithIndex(x, 0)
@@ -63,8 +58,20 @@ func (l *Step) stepWithIndex(x float64, startIdx int) (value float64, index int)
 	if idx == 0 {
 		return ys[0], idx + startIdx
 	}
-	if idx == l.NumInputs()-startIdx {
-		return ys[l.NumInputs()-startIdx-1], idx + startIdx
+	if idx == NumInputs(l)-startIdx {
+		return ys[NumInputs(l)-startIdx-1], idx + startIdx
 	}
 	return ys[idx-1], idx + startIdx
+}
+
+// RawData returns the raw underling points.
+func (l *Step) RawData() ([]float64, []float64) {
+	return l.x, l.y
+}
+
+// SetRawData updates the raw underling points.
+func (l *Step) SetRawData(xs, ys []float64) error {
+	l.x = xs
+	l.y = ys
+	return l.Fit()
 }
